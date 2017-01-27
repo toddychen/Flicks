@@ -19,6 +19,7 @@
 		118D58301E36D19F005F5B1E /* iconmonstr-star-2-24.png in Resources */ = {isa = PBXBuildFile; fileRef = 118D582F1E36D19F005F5B1E /* iconmonstr-star-2-24.png */; };
 		118D58321E36D1A9005F5B1E /* iconmonstr-video-9-24.png in Resources */ = {isa = PBXBuildFile; fileRef = 118D58311E36D1A9005F5B1E /* iconmonstr-video-9-24.png */; };
 		11D9C4CF1E381162001CE1FA /* MovieDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 11D9C4CE1E381162001CE1FA /* MovieDetailViewController.m */; };
+		11D9C4D21E3B2DA9001CE1FA /* MoviePosterCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 11D9C4D11E3B2DA9001CE1FA /* MoviePosterCollectionViewCell.m */; };
 		92B11FC8570B2923FFCD7AD5 /* libPods-Flicks.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDAC11C1FE3126E1448239FB /* libPods-Flicks.a */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,8 @@
 		118D58311E36D1A9005F5B1E /* iconmonstr-video-9-24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconmonstr-video-9-24.png"; sourceTree = "<group>"; };
 		11D9C4CD1E381162001CE1FA /* MovieDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieDetailViewController.h; sourceTree = "<group>"; };
 		11D9C4CE1E381162001CE1FA /* MovieDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieDetailViewController.m; sourceTree = "<group>"; };
+		11D9C4D01E3B2DA9001CE1FA /* MoviePosterCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoviePosterCollectionViewCell.h; sourceTree = "<group>"; };
+		11D9C4D11E3B2DA9001CE1FA /* MoviePosterCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoviePosterCollectionViewCell.m; sourceTree = "<group>"; };
 		25A0162ABA3B052719E5C48A /* Pods-Flicks.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Flicks.release.xcconfig"; path = "Pods/Target Support Files/Pods-Flicks/Pods-Flicks.release.xcconfig"; sourceTree = "<group>"; };
 		BDAC11C1FE3126E1448239FB /* libPods-Flicks.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Flicks.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F14A95264AE227A3F4DDB452 /* Pods-Flicks.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Flicks.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Flicks/Pods-Flicks.debug.xcconfig"; sourceTree = "<group>"; };
@@ -81,6 +84,8 @@
 			isa = PBXGroup;
 			children = (
 				118D58131E368408005F5B1E /* AppDelegate.h */,
+				11D9C4D01E3B2DA9001CE1FA /* MoviePosterCollectionViewCell.h */,
+				11D9C4D11E3B2DA9001CE1FA /* MoviePosterCollectionViewCell.m */,
 				118D58141E368408005F5B1E /* AppDelegate.m */,
 				118D58161E368408005F5B1E /* ViewController.h */,
 				118D58171E368408005F5B1E /* ViewController.m */,
@@ -256,6 +261,7 @@
 				118D58181E368408005F5B1E /* ViewController.m in Sources */,
 				118D58151E368408005F5B1E /* AppDelegate.m in Sources */,
 				118D58291E368FE1005F5B1E /* MovieCell.m in Sources */,
+				11D9C4D21E3B2DA9001CE1FA /* MoviePosterCollectionViewCell.m in Sources */,
 				118D582E1E36AEE9005F5B1E /* MovieModel.m in Sources */,
 				118D58121E368408005F5B1E /* main.m in Sources */,
 			);
