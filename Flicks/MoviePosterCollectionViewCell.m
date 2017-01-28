@@ -42,6 +42,8 @@
     [super layoutSubviews];
     // image view is same size as cell
     self.imageView.frame = self.contentView.bounds;
+    //self.imageView.frame = CGRectMake(0, 0, 100, 100);
 }
+
 
 @end

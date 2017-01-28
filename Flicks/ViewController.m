@@ -19,58 +19,93 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *movieCollectionView;
 @property (strong, nonatomic) NSArray<MovieModel *> *movies;
 @property (strong, nonatomic) NSString *apiKey;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 
 @end
 
 @implementation ViewController
+- (IBAction)onValueChanged:(UISegmentedControl *)sender {
+    switch(sender.selectedSegmentIndex) {
+        case 0:
+            NSLog(@"list");
+            _movieCollectionView.hidden = true;
+            _movieTableView.hidden = false;
+            break;
+        case 1:
+            NSLog(@"grid");
+            _movieTableView.hidden = true;
+            _movieCollectionView.hidden = false;
+            break;
+        default:
+            break;
+    }
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib./Users/yic/Downloads/movie.jpg
     
-    self.movieTableView.backgroundColor = [UIColor yellowColor];
+    [self onValueChanged:_segmentedControl];
     
+    [self.view setBackgroundColor:[UIColor yellowColor]];
+    
+    
+    // UITableView
+    self.movieTableView.backgroundColor = [UIColor orangeColor];
     self.movieTableView.dataSource = self;
-    
-    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    refreshControl.backgroundColor = [UIColor purpleColor];
-    refreshControl.tintColor = [UIColor whiteColor];
-    
-    self.apiKey = @"a07e22bc18f5cb106bfe4cc1f83ad8ed";
-    if ([self.restorationIdentifier isEqualToString:@"now_playing"]) {
-        [self fetchMovies:[@"https://api.themoviedb.org/3/movie/now_playing?api_key=" stringByAppendingString:self.apiKey]];
-        [refreshControl addTarget:self action:@selector(fetchMoviesNowPlaying) forControlEvents:UIControlEventValueChanged];
-
-    } else if ([self.restorationIdentifier isEqualToString:@"top_rated"]){
-        [self fetchMovies:[@"https://api.themoviedb.org/3/movie/top_rated?api_key=" stringByAppendingString:self.apiKey]];
-        [refreshControl addTarget:self action:@selector(fetchMoviesTopRated) forControlEvents:UIControlEventValueChanged];
-
-    }
-    
-    [self.movieTableView setRefreshControl:refreshControl];
     
     
     // UICollectionView
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     CGFloat screenWidth = CGRectGetWidth(self.view.bounds);
     CGFloat itemHeight = 150;
-    CGFloat itemWidth = screenWidth / 3;
+    CGFloat itemWidth = screenWidth / 4;
     layout.minimumLineSpacing = 0;
     layout.minimumInteritemSpacing = 0;
     layout.itemSize = CGSizeMake(itemWidth, itemHeight);
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
     
-    
-    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectInset(self.view.bounds, 0, 64) collectionViewLayout:layout];
+    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 64, self.view.bounds.size.width, self.view.bounds.size.height) collectionViewLayout:layout];
     [collectionView registerClass:[MoviePosterCollectionViewCell class] forCellWithReuseIdentifier:@"MoviePosterCollectionViewCell"];
     collectionView.dataSource = self;
     collectionView.delegate = self;
-    collectionView.backgroundColor = [UIColor magentaColor];
+    collectionView.backgroundColor = [UIColor orangeColor];
     [self.view addSubview:collectionView];
-    //collectionView.hidden = YES;
     self.movieCollectionView = collectionView;
     
-    self.movieTableView.hidden = YES;
+    
+    // UIRefreshControl
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.backgroundColor = [UIColor orangeColor];
+    refreshControl.tintColor = [UIColor whiteColor];
+    UIRefreshControl *refreshControl2 = [[UIRefreshControl alloc] init];
+    refreshControl2.backgroundColor = [UIColor orangeColor];
+    refreshControl2.tintColor = [UIColor whiteColor];
+    
+    self.apiKey = @"a07e22bc18f5cb106bfe4cc1f83ad8ed";
+    NSLog(@"restorationIdentifier: %@", self.restorationIdentifier);
+    if ([self.restorationIdentifier isEqualToString:@"now_playing"]) {
+        [self fetchMovies:[@"https://api.themoviedb.org/3/movie/now_playing?api_key=" stringByAppendingString:self.apiKey]];
+        [refreshControl addTarget:self action:@selector(fetchMoviesNowPlaying) forControlEvents:UIControlEventValueChanged];
+        [refreshControl2 addTarget:self action:@selector(fetchMoviesNowPlaying) forControlEvents:UIControlEventValueChanged];
+
+    } else if ([self.restorationIdentifier isEqualToString:@"top_rated"]){
+        [self fetchMovies:[@"https://api.themoviedb.org/3/movie/top_rated?api_key=" stringByAppendingString:self.apiKey]];
+        [refreshControl addTarget:self action:@selector(fetchMoviesTopRated) forControlEvents:UIControlEventValueChanged];
+        [refreshControl2 addTarget:self action:@selector(fetchMoviesTopRated) forControlEvents:UIControlEventValueChanged];
+    }
+    
+    [self.movieTableView setRefreshControl:refreshControl];
+    [self.movieCollectionView setRefreshControl:refreshControl2];
+    
+    
+    //[self.movieTableView insertSubview:refreshControl atIndex:0];
+    //[self.movieCollectionView insertSubview:refreshControl2 atIndex:0];
+    
+    // Hide view for default
+    self.movieCollectionView.hidden = YES;
+    //self.movieTableView.hidden = YES;
     
     
 }
@@ -122,6 +157,7 @@
                                                     }
                                                     self.movies = models;
                                                     [self.movieTableView reloadData];
+                                                    [self.movieCollectionView reloadData];
                                                     
                                                 } else {
                                                     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Network Error!"
@@ -133,8 +169,11 @@
                                                     [self presentViewController:alert animated:YES completion:nil];
                                                     NSLog(@"An error occurred: %@", error.description);
                                                 }
-                                                if (self.movieTableView.refreshControl) {
+                                                if (self.movieTableView.refreshControl.isRefreshing) {
                                                     [self.movieTableView.refreshControl endRefreshing];
+                                                }
+                                                if (self.movieCollectionView.refreshControl.isRefreshing) {
+                                                    [self.movieCollectionView.refreshControl endRefreshing];
                                                 }
                                             }];
     [task resume];
@@ -157,7 +196,7 @@
     MovieCell *cell = [tableView dequeueReusableCellWithIdentifier:@"movieCell" forIndexPath:indexPath];
     MovieModel *model = self.movies[indexPath.row];
     
-    cell.backgroundColor = [UIColor yellowColor];
+    cell.backgroundColor = [UIColor orangeColor];
     [cell.titleLabel setText:model.title];
     [cell.overviewLabel setText:model.movieDescription];
     [cell.posterImage setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://image.tmdb.org/t/p/w342%@", model.posterURLString]]];
@@ -169,9 +208,16 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"movieDetailControllerSegue"]){
+        NSLog(@"Here in serge1!");
         NSIndexPath *indexPath = [self.movieTableView indexPathForCell:(UITableViewCell *)sender];
         MovieDetailViewController *movieDetailViewController = [segue destinationViewController];
         movieDetailViewController.movieModel = self.movies[indexPath.row];
+    } else if ([segue.identifier isEqualToString:@"movieDetailControllerSegue2"]) {
+        NSLog(@"Here in serge2!");
+        NSIndexPath *indexPath = [self.movieCollectionView indexPathForCell:(MoviePosterCollectionViewCell *)sender];
+        MovieDetailViewController *movieDetailViewController = [segue destinationViewController];
+        movieDetailViewController.movieModel = self.movies[indexPath.item];
+        NSLog(@"%@", movieDetailViewController.movieModel.title);
     }
 }
 
@@ -194,5 +240,10 @@
     [cell reloadData];
     return cell;
 }
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self performSegueWithIdentifier:@"movieDetailControllerSegue2" sender:[self.movieCollectionView cellForItemAtIndexPath:indexPath]];
+}
+
 
 @end
